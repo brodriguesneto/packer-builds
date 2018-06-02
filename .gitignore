@@ -1,0 +1,48 @@
+# Packer
+**/*.box
+**/*.vmx
+**/*.vmdk
+**/*.ovf
+**/*.nvram
+**/*.vmxf
+**/*.vmsd
+**/*.vhd
+**/packer_cache/*
+**/artifact/*
+
+# Vagrant
+**/.vagrant
+
+# Vim
+.*.s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Ansible
+**/*.retry
+**/.ansible
+
+# Terraform
+**/*tfstate.backup
+**/*tfstate.*.backup
+**/*.plan
+**/.terraform*
+**/backend.tfvars
+
+# VSCODE
+.vscode
+
+# openssl
+**/*.crt
+**/*.key

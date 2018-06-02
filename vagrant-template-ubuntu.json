@@ -1,0 +1,92 @@
+{
+  "_comment": "Ubuntu Base Template. MOST BE USED with var-file template",
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
+      "virtualbox_version_file": ".vbox_version",
+      "disk_size": "{{ user `disk_size` }}",
+      "hard_drive_interface": "{{ user `hard_drive_interface`}}",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "shutdown_command": "{{ user `shutdown_command` }}",
+      "ssh_username": "root",
+      "ssh_password": "vagrant",
+      "ssh_wait_timeout": "{{ user `ssh_wait_timeout` }}",
+      "headless": "{{ user `headless` }}",
+      "vm_name": "{{ user `vm_name` }}",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{ user `memory_size` }}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{ user `number_of_cpus` }}"
+        ]
+      ],
+      "http_directory": "{{ user `http_directory` }}",
+      "boot_command": [
+        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs>",
+        "/install/vmlinuz ",
+        "hostname=ubuntu ",
+        "url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `preseed_cfg` }} ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "grub-installer/bootdev=/dev/sda<wait> ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "netcfg/get_domain=vm ",
+        "netcfg/get_hostname=ubuntu ",
+        "noapic ",
+        "initrd=/install/initrd.gz -- <enter>"
+      ],
+      "output_directory": "{{ user `artifact_root` }}/{{ user `vm_name` }}/{{ .Provider }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} bash '{{.Path}}'",
+      "expect_disconnect": true,
+      "scripts": [
+        "{{ user `script_directory` }}/vagrant.sh",
+        "{{ user `script_directory` }}/virtualbox.sh",
+        "{{ user `script_directory` }}/sshd.sh",
+        "{{ user `script_directory` }}/rc.local.sh",
+        "{{ user `script_directory` }}/python.sh",
+        "{{ user `script_directory` }}/tooling.sh",
+        "{{ user `script_directory` }}/upgrade.sh",
+        "{{ user `script_directory` }}/cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": false,
+        "only": [
+          "virtualbox-iso"
+        ],
+        "output": "{{ user `artifact_root` }}/{{ user `vm_name`}}/{{ .Provider }}/{{ user `vm_name` }}.box"
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "{{user `vagrant_cloud_account`}}/{{ user `vm_name` }}",
+        "version": "{{ timestamp }}",
+        "version_description": "{{user `vagrant_version_description`}}"
+      }
+    ]
+  ]
+}

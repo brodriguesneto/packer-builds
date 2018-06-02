@@ -1,0 +1,21 @@
+{
+  "_comment": "Ubuntu 16.04 Server LTS x86_64 var-file template",
+  "artifact_root": "artifact",
+  "vm_name": "ubuntu-1604",
+  "virtualbox_guest_os_type": "Ubuntu_64",
+  "number_of_cpus": "1",
+  "memory_size": "512",
+  "disk_size": "10000",
+  "hard_drive_interface": "sata",
+  "headless": "false",
+  "iso_url": "http://releases.ubuntu.com/16.04.4/ubuntu-16.04.4-server-amd64.iso",
+  "iso_checksum": "0a03608988cfd2e50567990dc8be96fb3c501e198e2e6efcb846d89efc7b89f2",
+  "iso_checksum_type": "sha256",
+  "preseed_cfg": "ubuntu-1604.cfg",
+  "http_directory": "http",
+  "script_directory": "script",
+  "shutdown_command": "/sbin/shutdown -h now",
+  "ssh_wait_timeout": "3600s",
+  "vagrant_cloud_account": "everproven",
+  "vagrant_version_description": "Ubuntu Server 16.04 LTS"
+}
