@@ -16,7 +16,7 @@ git clone git@github.com:everproven/packer-builds.git
 cd packer-builds
 ```
 
-Choose a template, for instance vagrant-template-ubuntu.json an on of its varfiles:
+Choose a template, vagrant-template-ubuntu.json for instance and one of its varfiles:
 
 ```sh
 # Validate the JSON template
